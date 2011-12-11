@@ -25,6 +25,16 @@ class Code(object):
                            self.asm._max_local_count,
                            code_length) + code + '\0\0\0\0'
 
+ACC_PUBLIC       = 0x0001
+ACC_PRIVATE      = 0x0002
+ACC_PROTECTED    = 0x0004
+ACC_STATIC       = 0x0008
+ACC_FINAL        = 0x0010
+ACC_SYNCHRONIZED = 0x0020
+ACC_NATIVE       = 0x0100
+ACC_ABSTRACT     = 0x0200
+ACC_STRICT       = 0x0800
+
 class MethodInfo(object):
     def __init__(self, name, descriptor, code, attributes=None, access=0):
         self.name = name
