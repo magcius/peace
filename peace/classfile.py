@@ -12,6 +12,8 @@ class Code(object):
         self._attribute_name_idx = pool.index_for(self.attribute_name)
 
     def serialize(self):
+        self.asm.pass1()
+
         code = self.asm.serialize()
         code_length = len(code)
         length = 2 + 2 + 4 + code_length + 2 + 2
