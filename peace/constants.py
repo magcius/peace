@@ -35,7 +35,7 @@ class StringInfo(object):
         self._utf8_idx = pool.index_for(self.utf8info)
 
     def serialize(self):
-        return struct.pack('>BH', 11, self._utf8_idx)
+        return struct.pack('>BH', 8, self._utf8_idx)
 
 class ClassInfo(object):
     def __init__(self, name):
