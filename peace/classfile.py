@@ -66,7 +66,7 @@ class MethodInfo(object):
         return bytes
 
 class CafeBabe(object):
-    def __init__(self, name):
+    def __init__(self, name, superclass):
         self.name = name
         self.superclass = superclass
         self.superclass_info = constants.ClassInfo(superclass)
