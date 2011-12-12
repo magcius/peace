@@ -23,8 +23,8 @@ class Code(object):
         return struct.pack('>HIHHI',
                            self._attribute_name_idx,
                            length,
-                           self.asm._max_stack_depth,
-                           self.asm._max_local_count,
+                           self.asm.max_stack_depth,
+                           self.asm.max_local_count,
                            code_length) + code + '\0\0\0\0'
 
 ACC_PUBLIC       = 0x0001
