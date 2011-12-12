@@ -54,9 +54,6 @@ class BaseInstruction(object):
         Called on the assembler's second pass.
         """
 
-def OP(opcode, base=BaseInstruction, **kw):
-    return opcode, base, kw
-
 class U1Instruction(BaseInstruction):
     arg_count = 1
 
@@ -160,6 +157,10 @@ class Label(BogusBase):
 
     def additional_repr(self):
         return " lbl=%r" % (self.labelname,)
+
+
+def OP(opcode, base=BaseInstruction, **kw):
+    return opcode, base, kw
 
 OpTable = dict(
     aaload          = OP(0x32, stack=-1),
