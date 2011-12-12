@@ -1,5 +1,4 @@
 
-from peace.lexer import Lexer
 from peace.classfile import ACC_STATIC, ACC_PUBLIC
 
 class Suite(object):
@@ -208,21 +207,3 @@ class Parser(object):
     def value(self):
         # TODO - full expressions
         return self.expects_any(('STRING', 'IDENTIFIER', 'NUMBER'))
-
-if __name__ == '__main__':
-    tokens = list(Lexer("""
-function juicy(juice) {
-    print(juice);
-}
-
-function main() {
-    var x = 0;
-
-    if (x == 0) {
-        juicy("Hello, world!");
-    }
-}
-"""))
-
-    parser = Parser(tokens)
-    suite = parser.toplevel()
