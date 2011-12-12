@@ -42,6 +42,9 @@ class ClassInfo(object):
         self.name = name
         self.name_utf8info = Utf8Info(name)
 
+    def __hash__(self):
+        return hash(('CLASSINFO', self.name))
+
     def write_constants(self, pool):
         self._name_utf8_idx = pool.index_for(self.name_utf8info)
 
@@ -54,6 +57,9 @@ class NameAndTypeInfo(object):
         self.name_utf8info = Utf8Info(name)
         self.descriptor = descriptor
         self.descriptor_utf8info = Utf8Info(descriptor)
+
+    def __hash__(self):
+        return hash(('NAMEANDTYPEINFO', self.name, self.descriptor))
 
     def __repr__(self):
         return "NameAndTypeInfo(%r, %r)" % (self.name, self.descriptor)
