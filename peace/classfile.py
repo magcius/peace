@@ -67,12 +67,17 @@ class MethodInfo(object):
 class CafeBabe(object):
     def __init__(self, name):
         self.name = name
+        self.superclass = superclass
+        self.superclass_info = constants.ClassInfo(superclass)
+
         self.cpool = constants.ConstantPool()
+        self.major, self.minor = 51, 0
+
         self.methods = []
 
         self.class_info = constants.ClassInfo(self.name)
         self._class_info_idx = self.cpool.index_for(self.class_info)
-        self.major, self.minor = 51, 0
+        self._superclass_info_idx = self.cpool.index_for(self.superclass_info)
 
     def add_method(self, method_info):
         self.methods.append(method_info)
@@ -82,7 +87,7 @@ class CafeBabe(object):
         bytes = '\xCA\xFE\xBA\xBE' + struct.pack('>HH', self.minor, self.major)
         bytes += self.cpool.serialize()
         bytes += struct.pack('>HHHHHH',
-                             0, self._class_info_idx, 0,
+                             0, self._class_info_idx, self._superclass_info_idx,
                              0, 0, len(self.methods))
         for method in self.methods:
             bytes += method.serialize()
