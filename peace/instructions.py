@@ -125,7 +125,7 @@ class JumpBase(BaseInstruction):
         return 3
 
 class InvokeU2Instruction(BaseInstruction):
-    def stack(self, methodref, num_args):
+    def __init__(self, methodref, num_args):
         self.methodref = methodref
         self.num_args = num_args
 
