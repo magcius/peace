@@ -71,21 +71,29 @@ class NameAndTypeInfo(object):
     def serialize(self):
         return struct.pack('>BHH', 12, self._name_utf8_idx, self._descriptor_utf8_idx)
 
-class MethodrefInfo(object):
-    def __init__(self, cls, nameandtype):
-        self.cls = cls
-        self.nameandtype = nameandtype
+class RefInfoBase(object):
+    def __init__(self, clsname, name, type):
+        self.cls = ClassInfo(clsname)
+        self.nameandtype = NameAndTypeInfo(name, type)
 
     def __repr__(self):
-        return "MethodInfo(%r, %r)" % (self.nameandtype.name,
-                                       self.nameandtype.descriptor)
+        name = type(self).__name__
+        return "%s(%r, %r)" % (name,
+                               self.nameandtype.name,
+                               self.nameandtype.descriptor)
 
     def write_constants(self, pool):
         self._cls_idx = pool.index_for(self.cls)
         self._nameandtype_idx = pool.index_for(self.nameandtype)
 
     def serialize(self):
-        return struct.pack('>BHH', 10, self._cls_idx, self._nameandtype_idx)
+        return struct.pack('>BHH', self.TAG, self._cls_idx, self._nameandtype_idx)
+
+class FieldrefInfo(RefInfoBase):
+    TAG = 9
+
+class MethodrefInfo(RefInfoBase):
+    TAG = 10
 
 class ConstantPool(util.ValuePool):
     write_method_name = "write_constants"
