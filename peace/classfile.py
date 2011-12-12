@@ -65,16 +65,18 @@ class MethodInfo(object):
         return bytes
 
 class CafeBabe(object):
-    def __init__(self, name, methods):
+    def __init__(self, name):
         self.name = name
         self.cpool = constants.ConstantPool()
+        self.methods = []
+
         self.class_info = constants.ClassInfo(self.name)
         self._class_info_idx = self.cpool.index_for(self.class_info)
         self.major, self.minor = 51, 0
 
-        self.methods = methods
-        for method in methods:
-            method.write_constants(self.cpool)
+    def add_method(self, method_info):
+        self.methods.append(method_info)
+        method_info.write_constants(self.cpool)
 
     def serialize(self):
         bytes = '\xCA\xFE\xBA\xBE' + struct.pack('>HH', self.minor, self.major)
