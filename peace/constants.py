@@ -89,8 +89,13 @@ class MethodrefInfo(object):
 
 class ConstantPool(util.ValuePool):
     write_method_name = "write_constants"
+    def __init__(self):
+        super(ConstantPool, self).__init__()
+        self.add_value(util.reserved)
+
     def serialize(self):
         bytes = struct.pack('H', len(self))
         for item in self:
-            bytes += item.serialize()
+            if item is not util.reserved:
+                bytes += item.serialize()
         return bytes

@@ -5,6 +5,12 @@ class empty(object):
 
 empty = empty()
 
+class reserved(object):
+    def __repr__(self):
+        return "(reserved)"
+
+reserved = reserved()
+
 class ValuePool(object):
     write_method_name = None
 
