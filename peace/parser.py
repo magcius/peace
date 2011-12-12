@@ -1,32 +1,41 @@
 
 from peace.lexer import Lexer
+from peace.classfile import ACC_STATIC, ACC_PUBLIC
 
 class Suite(object):
     def __init__(self, functions):
         self.functions = functions
 
-    def compile(self, context):
+    def compile(self, compiler, context):
         for f in self.functions:
-            f.compile(context)
+            f.compile(compiler, context)
 
 class FunctionDefinition(object):
-    def __init__(self, name, paramspec, block):
+    def __init__(self, name, paramspec, body):
         self.name = name
         self.paramspec = paramspec
-        self.block = block
+        self.body = body
 
-    def compile(self, context):
-        context.begin_function(self.name, self.paramspec)
-        self.block.compile()
-        context.end_function(self.name)
+    def compile(self, compiler, context):
+        # TODO - generate real descriptors
+        name = self.name.contents
+        DESCRIPTORS = {
+            "main": "([Ljava/lang/String;)V"
+        }
+
+        param_names = [t.contents for t in self.paramspec]
+        compiler.begin_method(name, DESCRIPTORS[name], param_names, ACC_STATIC | ACC_PUBLIC)
+
+        self.body.compile(compiler, context)
+        compiler.exit_current_rib()
 
 class Block(object):
     def __init__(self, statements):
         self.statements = statements
 
-    def compile(self, context):
+    def compile(self, compiler, context):
         for s in self.statements:
-            s.compile(context)
+            s.compile(compiler, context)
 
 class VarDeclaration(object):
     def __init__(self, var_name, value):
