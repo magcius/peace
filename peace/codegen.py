@@ -52,20 +52,3 @@ class CodeGenerator(object):
     def serialize(self):
         return self.cafebabe.serialize()
 
-if __name__ == '__main__':
-    from peace.lexer import Lexer
-    from peace.parser import Parser
-    tokens = list(Lexer("""
-function main() {
-    print("Hello, world!");
-}
-"""))
-
-    parser = Parser(tokens)
-    suite = parser.toplevel()
-
-    codegen = CodeGenerator("test", "java/lang/Object", suite)
-    codegen.compile()
-    with open('test.class', 'wb') as f:
-        f.write(codegen.serialize())
-
