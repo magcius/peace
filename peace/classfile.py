@@ -52,6 +52,7 @@ class MethodInfo(object):
     def write_constants(self, pool):
         self._name_utf8_idx = pool.index_for(self.name_utf8info)
         self._descriptor_utf8_idx = pool.index_for(self.descriptor_utf8info)
+        self.code.write_constants(pool)
 
     def serialize(self):
         bytes = struct.pack('>HHHH',
