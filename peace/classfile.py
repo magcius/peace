@@ -10,6 +10,7 @@ class Code(object):
 
     def write_constants(self, pool):
         self._attribute_name_idx = pool.index_for(self.attribute_name)
+        self.asm.write_constants(pool)
 
     def serialize(self):
         self.asm.emit('return')
