@@ -1,4 +1,5 @@
 
+from peace import constants
 from peace.classfile import ACC_STATIC, ACC_PUBLIC
 
 class Suite(object):
@@ -50,10 +51,33 @@ class IfStatement(object):
         self.expression = expression
         self.body = body
 
+def print_builtin(compiler, context, args):
+    out = constants.FieldrefInfo("java/lang/System", "out", "Ljava/io/PrintStream;")
+    println = constants.MethodrefInfo("java/io/PrintStream", "println", "(Ljava/lang/String;)V")
+
+    assert len(args) == 1
+    assert args[0].kind == 'STRING'
+
+    compiler.emit('getstatic', out)
+    compiler.emit('ldc', constants.StringInfo(args[0].contents))
+    compiler.emit('invokevirtual', println, 1)
+
 class FunctionCall(object):
     def __init__(self, calling, arglist):
         self.calling = calling
         self.arglist = arglist
+
+    def compile(self, compiler, context):
+        calling = self.calling.contents
+
+        BUILTINS = {
+            "print": print_builtin,
+        }
+
+        if calling in BUILTINS:
+            BUILTINS[calling](compiler, context, self.arglist)
+        else:
+            assert False
 
 class BinaryExpression(object):
     def __init__(self, op, lhs, rhs):
