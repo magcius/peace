@@ -1,4 +1,6 @@
 
+import struct
+
 def _make_offset_label_name(offset):
     return "lbl" + str(offset)
 
@@ -88,6 +90,19 @@ class LoadConstantInstruction(BaseInstruction):
 
     def __len__(self):
         return 2
+
+class GetFieldInstruction(BaseInstruction):
+    def __init__(self, field):
+        self.field = field
+
+    def write_constants(self, pool):
+        self._idx = pool.index_for(self.field)
+
+    def serialize_arguments(self):
+        return struct.pack('>H', self._idx)
+
+    def __len__(self):
+        return 3
 
 class JumpBase(BaseInstruction):
     jumplike = True
@@ -244,8 +259,8 @@ OpTable = dict(
     fstore_2        = OP(0x45, stack=-1),
     fstore_3        = OP(0x46, stack=-1),
     fsub            = OP(0x66, stack=-1),
-    getfield        = OP(0xB4, arg_count=2),
-    getstatic       = OP(0xB2, stack=+1, arg_count=2),
+    getfield        = OP(0xB4, base=GetFieldInstruction),
+    getstatic       = OP(0xB2, stack=+1, base=GetFieldInstruction),
     goto            = OP(0xA7, arg_count=2),
     goto_w          = OP(0xC8, arg_count=4),
     i2b             = OP(0x91),
