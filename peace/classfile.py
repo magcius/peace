@@ -77,7 +77,7 @@ class CafeBabe(object):
             method.write_constants(self.cpool)
 
     def serialize(self):
-        bytes = 'cafebabe' + struct.pack('>HH', self.minor, self.major)
+        bytes = '\xCA\xFE\xBA\xBE' + struct.pack('>HH', self.minor, self.major)
         bytes += self.cpool.serialize()
         bytes += struct.pack('>HHHHHH',
                              0, self._class_info_idx, 0,
