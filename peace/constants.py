@@ -94,7 +94,7 @@ class ConstantPool(util.ValuePool):
         self.add_value(util.reserved)
 
     def serialize(self):
-        bytes = struct.pack('H', len(self))
+        bytes = struct.pack('>H', len(self))
         for item in self:
             if item is not util.reserved:
                 bytes += item.serialize()
